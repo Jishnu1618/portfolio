@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jishnu Roy - Interactive Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chosen Palette: Professional Minimalism (Charcoal, Light Gray, Vibrant Teal) -->
+    <!-- Application Structure Plan: The application is structured as a single-page interactive portfolio with a fixed sidebar for quick navigation. This design allows recruiters to either follow a linear path or jump directly to sections of interest like 'Projects' or 'Skills'. The core interaction is a skill-based filtering system: clicking a skill in the 'Skills Dashboard' dynamically highlights relevant projects and experiences. This immediately demonstrates the practical application of his abilities, offering a more intuitive and efficient review process than a static document. -->
+    <!-- Visualization & Content Choices: Resume Info -> Skills list; Goal -> Organize & Compare; Viz -> Interactive Bar Chart (Chart.js); Interaction -> Click a skill bar to filter projects; Justification -> The chart provides a quick visual summary of proficiencies, while the filtering interaction connects skills to tangible work. Resume Info -> Projects/Experience; Goal -> Inform & Organize; Viz -> Tailwind CSS Cards; Interaction -> Cards are filtered based on skill selection; Justification -> Cards provide structured, scannable information, and the filtering makes it easy to see how specific skills were used. This structure avoids SVG and Mermaid, using standard, interactive web technologies. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #d4d4d4;
+            background: none;
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #2dd4bf;
+            border-left-color: #2dd4bf;
+            transform: translateX(4px);
+        }
+        .skill-tag {
+            transition: all 0.2s ease-in-out;
+        }
+        .project-card {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .filtered-out {
+            opacity: 0.6;
+            transform: scale(0.98);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .header-bg {
+            background-image: url('bg_img (2).jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            height: 40vh;
+            filter:brightness(1.3)
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .animate-section {
+            opacity: 0.9;
+            transform: translateY(20px);
+            transition: opacity 0.1s ease-out, transform 0.6s ease-out;
+        }
+        .animate-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .main-content-transparent {
+            background-color: rgba(26, 26, 26, 1); /* Adjust the last number (0.6) for transparency */
+            backdrop-filter: blur(1px); /* Optional: adds a blur effect to the background video */
+        }
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.6);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: hidden;
+            position: relative;
+        }
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #d4d4d4;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 51;
+        }
+    </style>
+</head>
+<body class="text-[#d4d4d4] relative">
+
+    <video autoplay muted loop id="video-background">
+        <source src="1851190-uhd_3840_2160_25fps.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-[#111111]/80 backdrop-blur-md border-r border-[#2d2d2d] p-8 fixed top-0 left-0 h-full hidden md:flex flex-col justify-between z-10">
+            <div>
+                <h1 class="text-2xl font-bold text-[#fafafa]">Jishnu Roy</h1>
+                <p class="text-sm text-[#a3a3a3] mt-1">ECE Student & Developer</p>
+                <nav id="desktop-nav" class="mt-12 space-y-4">
+                    <a href="#home" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">🏠 Home</a>
+                    <a href="#skills" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">📊 Skills Dashboard</a>
+                    <a href="#portfolio" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">💼 Portfolio</a>
+                    <a href="#education" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">🎓 Education</a>
+                    <a href="#extracurricular" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">🏅 Extracurricular & Achievements</a>
+                    <a href="#gemini" class="nav-link block font-medium text-[#a3a3a3] py-2 px-4">✨ Gemini AI Tools</a>
+                </nav>
+            </div>
+            <div class="flex space-x-4">
+                <a href="https://linkedin.com/in/jishnu-roy-16z" target="_blank" class="text-[#a3a3a3] hover:text-[#2dd4bf]">
+                    <span class="sr-only">LinkedIn</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://github.com/Jishnu1618" target="_blank" class="text-[#a3a3a3] hover:text-[#2dd4bf]">
+                    <span class="sr-only">GitHub</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <button id="whatsapp-icon" class="text-[#a3a3a3] hover:text-[#2dd4bf] transition-colors">
+                    <span class="sr-only">WhatsApp</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.001 0c-6.627 0-12 5.373-12 12s5.373 12 12 12c6.627 0 12-5.373 12-12s-5.373-12-12-12zm-2.062 17.594l-.794.218c-.463.125-.964.07-1.393-.146-.432-.213-.749-.571-.97-.988l-.517-.987c-.16-.305.158-.696.5-.59l1.696.531c.328.102.668.156 1.01.166l.036-.002c.045-.005.09-.008.135-.01l1.722-.538c.325-.102.65-.034.939.191.29.224.469.569.469.932l-.001 1.096-.001.002c0 .025-.008.05-.021.074-.012.023-.025.044-.047.065-.021.02-.045.037-.07.05l-1.092.651c-.347.207-.768.212-1.12.012z"/></svg>
+                </button>
+                <a id="phone-icon" href="tel:+918172086902" class="text-[#a3a3a3] hover:text-[#2dd4bf] transition-colors">
+                    <span class="sr-only">Call</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.07 19.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0zM12.93 19.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0zM17.93 14.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0zM22.93 9.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0zM12.93 4.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0zM17.93 4.46c.15-.14.24-.3.26-.46a1.996 1.996 0 0 0-.4-1.29l-1.92-1.92c-.37-.37-.98-.37-1.35 0l-1.35 1.35c-.37.37-.37.98 0 1.35l1.92 1.92c.38.38.98.38 1.35 0z"/></svg>
+                </a>
+            </div>
+        </aside>
+
+        <div class="md:hidden sticky top-0 bg-[#111111]/80 backdrop-blur-lg border-b border-[#2d2d2d] z-10">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <h1 class="text-xl font-bold text-[#fafafa]">Jishnu Roy</h1>
+                 <div class="flex space-x-3">
+                    <a href="https://linkedin.com/in/jishnu-roy-16z" target="_blank" class="text-[#a3a3a3] hover:text-[#2dd4bf]">
+                        <span class="sr-only">LinkedIn</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <a href="https://github.com/Jishnu1618" target="_blank" class="text-[#a3a3a3] hover:text-[#2dd4bf]">
+                        <span class="sr-only">GitHub</span>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <main class="flex-1 md:ml-64 relative">
+            <header class="header-bg flex items-end p-4 sm:p-8 md:p-12 text-white">
+                <div class="header-overlay"></div>
+                <div class="relative z-10 w-full max-w-4xl mx-auto">
+                    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">Jishnu Roy</h1>
+                    <p class="mt-2 text-xl sm:text-2xl text-[#e0e0e0]">Electronics & Communication Engineering Student</p>
+                    <div class="mt-4 text-[#a3a3a3] text-sm sm:text-base space-y-1">
+                        <p>+91-8172086902 | jishnuroy200316@gmail.com</p>
+                        <p>Kolkata, West Bengal</p>
+                    </div>
+                </div>
+            </header>
+            <div class="p-4 sm:p-8 md:p-12 max-w-4xl mx-auto space-y-20 bg-[#1a1a1a]/80 backdrop-blur-md relative z-20">
+
+                <section id="home" class="animate-section">
+                    <div class="md:flex md:items-start md:gap-8">
+                        <img id="profile-pic" src="pp_img.jpg" alt="Jishnu Roy" class="rounded-full w-48 h-48 mb-8 md:mb-0 mx-auto md:mx-0 shadow-lg object-cover border-4 border-[#2d2d2d] cursor-pointer">
+                        <div>
+                            <h2 class="text-3xl font-bold text-[#fafafa] tracking-tight text-center md:text-left">Profile Summary</h2>
+                            <p id="profile-summary-text" class="mt-4 text-lg text-[#d4d4d4] max-w-2xl text-center md:text-left cursor-pointer hover:underline">
+                                A proactive third-year ECE student with hands-on experience in machine learning, backend development, and hardware integration. Proficient in building full-stack applications and deploying ML models, with a proven track record of strong performance in hackathons.
+                            </p>
+                            <div class="mt-8 flex gap-4 justify-center md:justify-start">
+                                <a href="mailto:jishnuroy200316@gmail.com" class="bg-[#2dd4bf] text-black font-semibold py-2 px-6 rounded-lg hover:bg-[#20b8a4] transition-colors transform hover:scale-105">Contact Me</a>
+                                <a href="#portfolio" class="bg-[#111111] border border-[#2d2d2d] text-[#d4d4d4] font-semibold py-2 px-6 rounded-lg hover:bg-[#222222] transition-colors transform hover:scale-105">View Portfolio</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="skills" class="animate-section">
+                    <h3 class="text-3xl font-bold text-[#fafafa] tracking-tight">Skills Dashboard</h3>
+                    <p class="mt-2 text-[#a3a3a3] max-w-2xl">This section provides a visual overview of my technical abilities. Click on a skill in the chart or the lists below to filter the projects in the portfolio section and see where these skills have been applied.</p>
+                    
+                    <div id="filter-status" class="mt-4 text-sm text-[#a3a3a3] h-6"></div>
+
+                    <div class="mt-8">
+                        <div class="chart-container">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4 class="font-bold text-lg text-[#fafafa]">Languages</h4>
+                            <ul id="skills-list-languages" class="mt-4 space-y-2"></ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-[#fafafa]">Frameworks & Libraries</h4>
+                            <ul id="skills-list-frameworks" class="mt-4 space-y-2"></ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-[#fafafa]">Developer Tools</h4>
+                            <ul id="skills-list-tools" class="mt-4 space-y-2"></ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="portfolio" class="animate-section">
+                    <h3 class="text-3xl font-bold text-[#fafafa] tracking-tight">Portfolio: Experience & Projects</h3>
+                     <p class="mt-2 text-[#a3a3a3] max-w-2xl">Here are the projects and experiences that demonstrate my skills. Use the dashboard above to filter by technology.</p>
+                     <div class="mt-8 bg-[#111111] p-6 rounded-lg border border-[#2d2d2d] flex flex-col sm:flex-row items-center justify-between">
+                        <h4 class="font-bold text-lg text-[#fafafa]">Resume & Portfolio</h4>
+                        <div class="flex gap-4 mt-4 sm:mt-0">
+                            <a href="11_08_software_Resume.pdf" download class="bg-[#2dd4bf] text-black font-semibold py-2 px-6 rounded-lg hover:bg-[#20b8a4] transition-colors transform hover:scale-105">Download PDF</a>
+                            <a href="11_08_software_Resume.pdf" target="_blank" class="bg-[#2dd4bf] border border-[#2d2d2d] text-black font-semibold py-2 px-6 rounded-lg hover:bg-[#222222] transition-colors transform hover:scale-105">View PDF</a>
+                        </div>
+                     </div>
+                    <div id="portfolio-container" class="mt-8 space-y-12">
+                    </div>
+                </section>
+
+                <section id="education" class="animate-section">
+                    <h3 class="text-3xl font-bold text-[#fafafa] tracking-tight">Education & Certifications</h3>
+                     <p class="mt-2 text-[#a3a3a3] max-w-2xl">My academic background and the certifications I've earned to supplement my formal education.</p>
+                    <div class="mt-8 space-y-8">
+                        <div class="bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]">
+                            <h4 class="font-bold text-lg text-[#fafafa]">Institute of Engineering and Management</h4>
+                            <p class="text-[#a3a3a3]">B.Tech in Electronics and Communication Engineering</p>
+                            <p class="mt-2 text-sm text-[#555555]">July 2023 - May 2027 | SGPA: 8.68</p>
+                        </div>
+
+                        <div class="bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]">
+                             <h4 class="font-bold text-lg text-[#fafafa]">Certifications</h4>
+                             <ul class="mt-4 space-y-3 list-disc list-inside text-[#d4d4d4]">
+                                <li><a href="https://coursera.org/share/a7bb33ffaceae13f3ce9512d18816664" target="_blank" class="text-[#2dd4bf] hover:underline">AWS Cloud Practitioner Essentials</a></li>
+                                <li><a href="https://coursera.org/share/79f1a422844dfcc6fbbc0df72df5ff53" target="_blank" class="text-[#2dd4bf] hover:underline">IBM Introduction to Machine Learning</a></li>
+                                <li><a href="https://coursera.org/share/1cd57a101f24e9cccf4317369bd2823a" target="_blank" class="text-[#2dd4bf] hover:underline">Exploratory Data Analysis for Machine Learning</a></li>
+                                <li><a href="https://coursera.org/share/0d863f863418e869b2b1f259cfe6724d" target="_blank" class="text-[#2dd4bf] hover:underline">Introduction to Data Analytics</a></li>
+                             </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="extracurricular" class="animate-section">
+                    <h3 class="text-3xl font-bold text-[#fafafa] tracking-tight">Extracurricular & Achievements</h3>
+                    <p class="mt-2 text-[#a3a3a3] max-w-2xl">Highlights from my extracurricular activities and competitions.</p>
+                    <div class="mt-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]">
+                                <h4 class="font-bold text-lg text-[#fafafa]">Infosys Global Hackathon</h4>
+                                <p class="text-[#a3a3a3] font-semibold text-[#2dd4bf]">Ranked 6th amongst 30 selected teams</p>
+                                <p class="mt-2 text-sm text-[#555555]">July 2025 | Conducted over a span of 2 days.</p>
+                            </div>
+                            <div class="bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]">
+                                <h4 class="font-bold text-lg text-[#fafafa]">Smart Makers Festival</h4>
+                                <p class="text-[#a3a3a3]">Volunteer</p>
+                                <p class="mt-2 text-sm text-[#555555]">September 2024 | Collaborated for the smooth execution of the event.</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]">
+                             <h4 class="font-bold text-lg text-[#fafafa]">Creative Pursuits</h4>
+                             <p class="text-[#a3a3a3] mt-2">I have a passion for photography and enjoy capturing moments that tell a story. This skill has helped me develop a keen eye for detail and composition, which I apply to all my design and development projects.</p>
+                             <div class="mt-4">
+                                 <p class="text-sm font-semibold text-[#2dd4bf]">Sample work:</p>
+                                 <p class="text-[#d4d4d4]"><a href="https://drive.google.com/drive/folders/1N8VnL6PErC8v1ZVEwqIytvELZbclinBp?usp=sharing" target="_blank" class="text-[#2dd4bf] hover:underline">View my photography portfolio on Google Drive</a></p>
+                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="gemini" class="animate-section">
+                    <h3 class="text-3xl font-bold text-[#fafafa] tracking-tight">Gemini AI Tools ✨</h3>
+                    <p class="mt-2 text-[#a3a3a3] max-w-2xl">Explore my profile with the power of generative AI. You can ask questions about my resume or generate a personalized summary for a specific job.</p>
+                    
+                    <div class="mt-8 p-6 bg-[#111111] rounded-lg border border-[#2d2d2d]">
+                        <h4 class="font-bold text-lg text-[#fafafa]">Chat with Jishnu's Resume ✨</h4>
+                        <p class="text-[#a3a3a3] text-sm mt-1">Ask a question about my experience, skills, or projects. </p>
+                        <div id="chat-container" class="mt-4 h-64 overflow-y-auto p-4 bg-[#0a0a0a] rounded-lg border border-[#2d2d2d] space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-2">🤖</span>
+                                <div class="bg-[#222222] text-[#d4d4d4] p-3 rounded-xl rounded-tl-none max-w-[85%]">
+                                    Hello! I am an AI assistant for Jishnu Roy's resume. Ask me anything about his skills, projects, and background.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <input type="text" id="chat-input" placeholder="e.g., What is Agriguru?" class="flex-1 p-3 rounded-lg bg-[#222222] border border-[#2d2d2d] text-[#d4d4d4] placeholder-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#2dd4bf]">
+                            <button id="chat-send-btn" class="bg-[#2dd4bf] text-black font-semibold py-2 px-6 rounded-lg hover:bg-[#20b8a4] transition-colors">Send</button>
+                        </div>
+                        <div id="chat-loading" class="hidden mt-2 text-sm text-[#2dd4bf] animate-pulse">Thinking...</div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-[#111111] rounded-lg border border-[#2d2d2d]">
+                        <h4 class="font-bold text-lg text-[#fafafa]">Generate a Tailored "Why I'm a Good Fit" Message ✨</h4>
+                        <p class="mt-2 text-[#a3a3a3] max-w-2xl">This will generate a message to explain why Jishnu is a great fit for the job.</p>
+                        <textarea id="jd-input" rows="6" placeholder="Paste job description here..." class="mt-4 w-full p-3 rounded-lg bg-[#222222] border border-[#2d2d2d] text-[#d4d4d4] placeholder-[#a3a3a3] focus:outline-none focus:ring-2 focus:ring-[#2dd4bf]"></textarea>
+                        <button id="generate-fit-btn" class="mt-4 bg-[#2dd4bf] text-black font-semibold py-2 px-6 rounded-lg hover:bg-[#20b8a4] transition-colors">Generate Message</button>
+                        <div id="fit-message" class="mt-4 p-4 bg-[#0a0a0a] rounded-lg border border-[#2d2d2d] whitespace-pre-wrap"></div>
+                        <div id="fit-loading" class="hidden mt-2 text-sm text-[#2dd4bf] animate-pulse">Generating...</div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+    
+    <div id="modal-profile" class="hidden modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProfileModal()">&times;</span>
+            <img id="modal-image-full" src="" alt="Jishnu Roy" class="modal-image">
+        </div>
+    </div>
+    
+    <div id="modal-whatsapp" class="hidden modal-overlay">
+        <div class="modal-content text-center">
+            <span class="close-btn" onclick="closeWhatsappModal()">&times;</span>
+            <h4 class="text-xl font-bold mb-4">Scan to Connect on WhatsApp</h4>
+            <img src="Whatsapqr.jpg" alt="WhatsApp QR Code" class="w-64 h-64 mx-auto rounded-lg">
+            <p class="mt-4 text-sm text-[#a3a3a3]">Scan this code with your phone's camera to chat.</p>
+        </div>
+    </div>
+
+
+    <div id="profile-summary-modal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSummaryModal()">&times;</span>
+            <h4 class="text-xl font-bold mb-4 text-[#fafafa]">About Me</h4>
+            <p class="text-[#d4d4d4]">I am Jishnu Roy, a 3rd-year Electronics and Communication Engineering student at IEM, Kolkata, with a keen interest in bridging the gap between core electronics and modern software technologies. Over the past few years, I have explored domains ranging from machine learning and full-stack development to digital electronics and VLSI fundamentals.
+
+I enjoy building hands-on projects that combine innovation with real-world impact. Some of my key work includes:
+
+AgriGuru – a hackathon project using FastAPI, MongoDB, and CNN models to deliver intelligent crop and fertilizer recommendations, ranked 6th among 30 teams at an Infosys challenge.
+
+Virtual Barricading System – deployed YOLOv5 on Raspberry Pi 3 using custom datasets for real-time object detection and barricade monitoring.
+
+Image Editing WebApp – a full-stack project built with HTML, CSS, JavaScript, and FastAPI, integrated with the Cloudinary API for cloud-based storage and editing.
+
+Alongside projects, I am also improving in DSA, SQL, and cloud technologies (AWS, OCI) to strengthen my placement readiness.
+
+I bring to the table a mix of technical adaptability, problem-solving skills, and eagerness to learn, with the goal of pursuing opportunities in both software engineering and embedded electronics industries.</p>
+        </div>
+    </div>
+
+
+    <script>
+        const skillsData = {
+            languages: [
+                { name: 'Python', level: 95 },
+                { name: 'JavaScript', level: 80 },
+                { name: 'Java', level: 75 },
+                { name: 'MySQL', level: 85 },
+                { name: 'HTML/CSS', level: 90 },
+            ],
+            frameworks: [
+                { name: 'PyTorch', level: 85 },
+                { name: 'TensorFlow', level: 80 },
+                { name: 'Scikit-learn', level: 90 },
+                { name: 'FastAPI', level: 85 },
+                { name: 'YOLO', level: 75 },
+                { name: 'OpenCV', level: 80 },
+                { name: 'Pandas', level: 90 },
+                { name: 'NumPy', level: 85 },
+            ],
+            tools: [
+                { name: 'GitHub', level: 90 },
+                { name: 'Google Colab', level: 95 },
+                { name: 'VS Code', level: 90 },
+                { name: 'Roboflow', level: 80 },
+                { name: 'ArduinoIDE', level: 70 },
+            ],
+        };
+
+        const portfolioData = [
+            {
+                type: 'Experience',
+                title: 'Undergraduate Research Trainee',
+                company: 'IEDC, IEM',
+                date: 'June 2025 - Present',
+                description: [
+                    'Developed a Virtual Barricading system using YOLOv7 for real-time object detection.',
+                    'Built and annotated a custom dataset with Roboflow to train the detection models.',
+                    'Deployed optimized PyTorch models on Raspberry Pi 4B for efficient, real-time inference on edge devices.'
+                ],
+                tags: ['PyTorch', 'YOLO', 'OpenCV', 'Roboflow', 'Python']
+            },
+            {
+                type: 'Project',
+                title: 'Agriguru',
+                company: 'Personal Project',
+                date: 'July 2025 - Present',
+                description: [
+                    'Developed a full-stack web application with FastAPI serving RESTful APIs for crop prediction, disease detection, weather forecasting, and a chatbot.',
+                    'Trained a TensorFlow-based CNN model to predict plant disease from uploaded images.',
+                    'Developed a Scikit-learn ML model for crop prediction based on soil data and weather conditions.',
+                    'Managed user data, predictions, and chat logs in MongoDB, hosted on MongoDB Atlas.'
+                ],
+                tags: ['Python', 'FastAPI', 'HTML/CSS', 'JavaScript', 'TensorFlow', 'Scikit-learn', 'MongoDB', 'Pandas']
+            },
+            {
+                type: 'Project',
+                title: 'Customer Churn Prediction',
+                company: 'Personal Project',
+                date: 'April 2025',
+                description: [
+                    'Performed exploratory data analysis (EDA) to understand customer demographics, usage patterns, and their relationship with churn.',
+                    'Visualized key features like age, gender, tenure, and usage frequency to extract insights.',
+                    'Trained a Logistic Regression model to predict customer churn, achieving an accuracy of approximately 95% on the test set.'
+                ],
+                tags: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'Matplotlib']
+            }
+        ];
+
+        let activeFilter = null;
+
+        function renderPortfolio() {
+            const container = document.getElementById('portfolio-container');
+            container.innerHTML = portfolioData.map(item => `
+                <div class="project-card bg-[#111111] p-6 rounded-lg border border-[#2d2d2d]" data-tags='${JSON.stringify(item.tags)}'>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-sm font-semibold text-[#2dd4bf]">${item.type}</span>
+                            <h4 class="font-bold text-xl text-[#fafafa] mt-1">${item.title}</h4>
+                            <p class="text-[#a3a3a3] text-sm">${item.company} | ${item.date}</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-[#d4d4d4] list-disc list-inside">
+                        ${item.description.map(d => `<li>${d}</li>`).join('')}
+                    </ul>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        ${item.tags.map(tag => `<span class="skill-tag bg-[#222222] text-[#a3a3a3] text-xs font-medium px-2.5 py-1 rounded-full">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSkillsLists() {
+            document.getElementById('skills-list-languages').innerHTML = skillsData.languages.map(s => `<li><button data-skill="${s.name}" class="skill-button text-[#d4d4d4] hover:text-[#2dd4bf]">${s.name}</button></li>`).join('');
+            document.getElementById('skills-list-frameworks').innerHTML = skillsData.frameworks.map(s => `<li><button data-skill="${s.name}" class="skill-button text-[#d4d4d4] hover:text-[#2dd4bf]">${s.name}</button></li>`).join('');
+            document.getElementById('skills-list-tools').innerHTML = skillsData.tools.map(s => `<li><button data-skill="${s.name}" class="skill-button text-[#d4d4d4] hover:text-[#2dd4bf]">${s.name}</button></li>`).join('');
+        }
+
+        function applyFilter(skill) {
+            if (activeFilter === skill) {
+                activeFilter = null; 
+            } else {
+                activeFilter = skill;
+            }
+
+            const filterStatus = document.getElementById('filter-status');
+            if (activeFilter) {
+                filterStatus.innerHTML = `Filtering by: <span class="font-bold text-[#2dd4bf]">${activeFilter}</span> <button id="clear-filter" class="ml-2 text-xs text-[#a3a3a3] hover:underline">(Clear)</button>`;
+                document.getElementById('clear-filter').onclick = () => applyFilter(activeFilter);
+            } else {
+                filterStatus.textContent = 'Click a skill to filter projects.';
+            }
+
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                const tags = JSON.parse(card.dataset.tags);
+                if (activeFilter && !tags.includes(activeFilter)) {
+                    card.classList.add('filtered-out');
+                } else {
+                    card.classList.remove('filtered-out');
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPortfolio();
+            renderSkillsLists();
+
+            const allSkillsForChart = [...skillsData.languages, ...skillsData.frameworks, ...skillsData.tools].sort((a, b) => b.level - a.level);
+
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: allSkillsForChart.map(s => s.name),
+                    datasets: [{
+                        label: 'Skill Proficiency (Self-Assessed)',
+                        data: allSkillsForChart.map(s => s.level),
+                        backgroundColor: '#2dd4bf',
+                        borderColor: '#2dd4bf',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: '#444444'
+                            },
+                            ticks: {
+                                color: '#a3a3a3'
+                            }
+                        },
+                        y: {
+                           grid: {
+                                display: false
+                           },
+                           ticks: {
+                                color: '#a3a3a3'
+                           }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#222222',
+                            titleColor: '#fafafa',
+                            bodyColor: '#d4d4d4',
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const chartElement = elements[0];
+                            const skillName = skillsChart.data.labels[chartElement.index];
+                            applyFilter(skillName);
+                        }
+                    }
+                }
+            });
+
+            document.querySelectorAll('.skill-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    applyFilter(e.target.dataset.skill);
+                });
+            });
+
+            applyFilter(null);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            const profilePic = document.getElementById('profile-pic');
+            const modalProfile = document.getElementById('modal-profile');
+            const modalImageFull = document.getElementById('modal-image-full');
+            const whatsappIcon = document.getElementById('whatsapp-icon');
+            const modalWhatsapp = document.getElementById('modal-whatsapp');
+            const profileSummaryText = document.getElementById('profile-summary-text');
+            const profileSummaryModal = document.getElementById('profile-summary-modal');
+
+            profilePic.addEventListener('click', () => {
+                modalImageFull.src = profilePic.src;
+                modalProfile.classList.remove('hidden');
+            });
+            
+            modalProfile.addEventListener('click', (e) => {
+                if (e.target === modalProfile) {
+                    modalProfile.classList.add('hidden');
+                }
+            });
+
+            whatsappIcon.addEventListener('click', () => {
+                modalWhatsapp.classList.remove('hidden');
+            });
+
+            modalWhatsapp.addEventListener('click', (e) => {
+                if (e.target === modalWhatsapp) {
+                    modalWhatsapp.classList.add('hidden');
+                }
+            });
+
+            profileSummaryText.addEventListener('mouseenter', () => {
+                profileSummaryModal.classList.remove('hidden');
+            });
+            
+            profileSummaryText.addEventListener('mouseleave', () => {
+                 profileSummaryModal.classList.add('hidden');
+            });
+
+            profileSummaryModal.addEventListener('mouseenter', () => {
+                 profileSummaryModal.classList.remove('hidden');
+            });
+             profileSummaryModal.addEventListener('mouseleave', () => {
+                 profileSummaryModal.classList.add('hidden');
+            });
+
+
+        });
+
+        function closeProfileModal() {
+            document.getElementById('modal-profile').classList.add('hidden');
+        }
+        
+        function closeWhatsappModal() {
+            document.getElementById('modal-whatsapp').classList.add('hidden');
+        }
+         function closeSummaryModal() {
+            document.getElementById('profile-summary-modal').classList.add('hidden');
+         }
+
+        const resumeText = `Jishnu Roy
+        +91-8172086902 | jishnuroy200316@gmail.com | Kolkata, WB | linkedin.com/in/jishnu-roy-16z | github.com/Jishnu1618
+
+        PROFILE SUMMARY: A proactive third-year ECE student with hands-on experience in machine learning, backend development, and hardware integration. Proficient in building full-stack applications and deploying ML models, with a proven track record of strong performance in hackathons, including a 6th-place ranking in the Infosys Global Hackathon.
+
+        EDUCATION: Institute of Engineering and Management, B.Tech in Electronics and Communication Engineering, SGPA: 8.68. July 2023 - May 2027.
+
+        EXPERIENCE: Undergraduate Research Trainee | IEDC, IEM | Kolkata, WB. Developed a Virtual Barricading system using YOLOv7. Built and annotated a custom dataset with Roboflow. Deployed optimized PyTorch models on Raspberry Pi 4B for real-time inference. June 2025 - Present.
+
+        PROJECTS: Agriguru | Python, FastAPI, HTML, JS, CSS | July 2025 - Present. Developed a full-stack web application with FastAPI serving RESTful APIs for features like crop prediction, disease detection, weather forecasting, and a chatbot. Trained a TensorFlow-based CNN model to predict plant disease from uploaded images. Developed a Scikit-learn ML model for crop prediction based on soil contents and weather conditions. Utilized API calls for real-time weather forecasting and Mandi price updates. Managed user data, predictions, and chat logs in MongoDB, hosted on MongoDB Atlas.
+
+        Customer Churn Prediction | Python, Pandas, Numpy, Scikit-learn, Matplotlib | April 2025. Performed comprehensive Exploratory Data Analysis (EDA) to analyze customer demographics, usage patterns, and their relationship to churn. Trained a Logistic Regression model to predict customer churn, achieving an accuracy of approximately 95% on the test set.
+
+        SKILLS: Languages: Python, JavaScript, Java, MySQL, HTML/CSS. Frameworks & Libraries: PyTorch, TensorFlow, Scikit-learn, FastAPI, YOLO, OpenCV, Pandas, NumPy, Matplotlib. Developer Tools: GitHub, Google Colab, Visual Studio Code, Roboflow, MathWorks, ArduinoIDE.
+
+        CERTIFICATIONS: AWS Cloud Practitioner Essentials, Introduction to Machine Learning (IBM), Exploratory Data Analysis for Machine Learning, Introduction to Data Analytics.
+
+        EXTRACURRICULAR: Infosys Global Hackathon, July 2025, Ranked 6th out of 30 selected teams. Smart Makers Festival, September 2024, Volunteered for the smooth execution of the event. Creative Pursuits: I have a passion for photography and enjoy capturing moments that tell a story. This skill has helped me develop a keen eye for detail and composition, which I apply to all my design and development projects. Sample work: View my photography portfolio on Google Drive at https://drive.google.com/drive/folders/1N8VnL6PErC8v1ZVEwqIytvELZbclinBp?usp=sharing.`;
+
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        const chatContainer = document.getElementById('chat-container');
+        const chatLoading = document.getElementById('chat-loading');
+
+        async function fetchGeminiResponse(prompt) {
+            const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=';
+            const apiKey = '';
+            
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }],
+                tools: [{ "google_search": {} }],
+            };
+
+            let response;
+            try {
+                response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                    return text;
+                }
+            } catch (error) {
+                console.error('API call failed:', error);
+            }
+            return 'Sorry, I could not process that request.';
+        }
+
+        async function handleChat(userMessage) {
+            if (userMessage.trim() === '') return;
+
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'flex items-start justify-end';
+            userMessageDiv.innerHTML = `<div class="bg-[#2dd4bf] text-black p-3 rounded-xl rounded-tr-none max-w-[85%]">${userMessage}</div>`;
+            chatContainer.appendChild(userMessageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            chatInput.value = '';
+
+            chatLoading.classList.remove('hidden');
+
+            const fullPrompt = `You are a helpful AI assistant for Jishnu Roy's interactive resume. Your purpose is to answer questions based ONLY on the provided resume content. Do not make up any information. If a question cannot be answered from the resume, state that clearly. The resume content is as follows:
+            
+            ${resumeText}
+
+            The user's question is: "${userMessage}"`;
+
+            const aiResponse = await fetchGeminiResponse(fullPrompt);
+
+            chatLoading.classList.add('hidden');
+
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.className = 'flex items-start';
+            aiMessageDiv.innerHTML = `<span class="text-2xl mr-2">🤖</span><div class="bg-[#222222] text-[#d4d4d4] p-3 rounded-xl rounded-tl-none max-w-[85%]">${aiResponse}</div>`;
+            chatContainer.appendChild(aiMessageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        chatSendBtn.addEventListener('click', () => {
+            handleChat(chatInput.value);
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleChat(chatInput.value);
+            }
+        });
+
+        const jdInput = document.getElementById('jd-input');
+        const generateFitBtn = document.getElementById('generate-fit-btn');
+        const fitMessageDiv = document.getElementById('fit-message');
+        const fitLoading = document.getElementById('fit-loading');
+
+        generateFitBtn.addEventListener('click', async () => {
+            const jobDescription = jdInput.value.trim();
+            if (jobDescription === '') {
+                fitMessageDiv.textContent = 'Please paste a job description.';
+                return;
+            }
+
+            fitLoading.classList.remove('hidden');
+            fitMessageDiv.textContent = '';
+
+            const fitPrompt = `Based on the following resume, write a concise, single-paragraph summary explaining why this candidate is a good fit for the job described below. Highlight specific, relevant skills and experiences.
+
+            Resume:
+            ${resumeText}
+
+            Job Description:
+            ${jobDescription}`;
+
+            const generatedMessage = await fetchGeminiResponse(fitPrompt);
+
+            fitLoading.classList.add('hidden');
+            fitMessageDiv.textContent = generatedMessage;
+        });
+
+    </script>
+</body>
+</html>
