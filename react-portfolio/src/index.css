@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-dark: #09090b; /* Zinc 950 base */
+    --accent-cyan: #22d3ee;
+    --accent-violet: #8b5cf6;
+    --accent-fuchsia: #d946ef;
+  }
+
+  body {
+    @apply bg-[var(--bg-dark)] text-zinc-300 font-sans antialiased overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-200;
+  }
+
+  /* Custom minimal scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-[var(--bg-dark)];
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-800 rounded-full hover:bg-zinc-600 transition-colors;
+  }
+}
+
+@layer components {
+  /* Spotlight Card Base */
+  .spotlight-card {
+    @apply relative overflow-hidden bg-zinc-900/40 backdrop-blur-xl border border-zinc-800/50 rounded-2xl transition-all duration-500 hover:border-zinc-700/50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)];
+  }
+
+  /* Interactive gradient text */
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 animate-gradient-x;
+  }
+
+  /* Modern Glass Button */
+  .btn-glass {
+    @apply relative overflow-hidden px-6 py-2.5 rounded-xl font-medium text-sm tracking-wide transition-all duration-300 
+           border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white flex items-center gap-2
+           hover:shadow-[0_0_20px_rgba(34,211,238,0.15)];
+  }
+  
+  .btn-glass::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300 bg-[radial-gradient(circle_at_50%_120%,rgba(139,92,246,0.15),transparent_70%)];
+  }
+  .btn-glass:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Floating skill badges */
+  .badge-neon {
+    @apply px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-800/30 border border-zinc-700/50 text-zinc-400 
+           transition-all duration-300 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-cyan-500/10 
+           hover:shadow-[0_0_15px_rgba(34,211,238,0.2)];
+  }
+}
+
+@layer utilities {
+  .animate-gradient-x {
+    background-size: 200% auto;
+    animation: gradientX 4s linear infinite;
+  }
+
+  /* Animated Grid Background */
+  .bg-grid-white {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.04)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  }
+}
+
+@keyframes gradientX {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
