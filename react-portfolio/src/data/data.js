@@ -1,55 +1,67 @@
 export const skillsData = {
   languages: [
+      { name: 'Java', level: 90 },
       { name: 'Python', level: 95 },
+      { name: 'SQL (MySQL/PostgreSQL)', level: 85 },
       { name: 'JavaScript', level: 80 },
-      { name: 'Java', level: 75 },
-      { name: 'MySQL', level: 85 },
       { name: 'HTML/CSS', level: 90 },
+      { name: 'MATLAB', level: 75 }
   ],
   frameworks: [
+      { name: 'FastAPI', level: 90 },
       { name: 'PyTorch', level: 85 },
       { name: 'TensorFlow', level: 80 },
       { name: 'Scikit-learn', level: 90 },
-      { name: 'FastAPI', level: 85 },
-      { name: 'YOLO', level: 75 },
+      { name: 'YOLO', level: 80 },
       { name: 'OpenCV', level: 80 },
-      { name: 'Pandas', level: 90 },
-      { name: 'NumPy', level: 85 },
+      { name: 'React.js', level: 75 }
   ],
   tools: [
-      { name: 'GitHub', level: 90 },
-      { name: 'Google Colab', level: 95 },
+      { name: 'Git/GitHub', level: 90 },
+      { name: 'AWS', level: 80 },
+      { name: 'OCI', level: 75 },
       { name: 'VS Code', level: 90 },
-      { name: 'Roboflow', level: 80 },
-      { name: 'ArduinoIDE', level: 70 },
+      { name: 'Postman', level: 85 },
+      { name: 'Roboflow', level: 80 }
   ],
 };
 
 export const portfolioData = [
   {
       type: 'Experience',
+      title: 'Junior Software Developer',
+      company: 'Radiant Research and Academics Pvt. Ltd.',
+      date: 'Jan 2026 - Present',
+      description: [
+          'Architecting a scalable Hospital ERP system utilizing a modular microservices architecture to manage end-to-end clinical, billing, and inventory workflows.',
+          'Designed normalized ERD and UML models with Role-Based Access Control (RBAC) to ensure secure data handling for high-volume hospital operations.',
+          'Optimized PostgreSQL/MySQL database queries, reducing report generation latency by 40%.'
+      ],
+      tags: ['Java', 'Microservices', 'PostgreSQL', 'MySQL', 'ERP']
+  },
+  {
+      type: 'Experience',
       title: 'Undergraduate Research Trainee',
       company: 'IEDC, IEM',
-      date: 'June 2025 - Present',
+      date: 'June 2025 - Nov 2025',
       description: [
-          'Developed a Virtual Barricading system using YOLOv7 for real-time object detection.',
-          'Built and annotated a custom dataset with Roboflow to train the detection models.',
-          'Deployed optimized PyTorch models on Raspberry Pi 4B for efficient, real-time inference on edge devices.'
+          'Developed a Virtual Barricading System integrating Facial Recognition and Object Detection using YOLOv5 and OpenCV.',
+          'Curated and annotated a custom dataset via Roboflow to enhance model precision in varying lighting.',
+          'Deployed optimized PyTorch models on Raspberry Pi 4B, achieving real-time inference suitable for edge security.'
       ],
       tags: ['PyTorch', 'YOLO', 'OpenCV', 'Roboflow', 'Python']
   },
   {
       type: 'Project',
-      title: 'Agriguru',
+      title: 'AgriGuru',
       company: 'Personal Project',
       date: 'July 2025 - Present',
       description: [
-          'Developed a full-stack web application with FastAPI serving RESTful APIs for crop prediction, disease detection, weather forecasting, and a chatbot.',
-          'Trained a TensorFlow-based CNN model to predict plant disease from uploaded images.',
-          'Developed a Scikit-learn ML model for crop prediction based on soil data and weather conditions.',
-          'Managed user data, predictions, and chat logs in MongoDB, hosted on MongoDB Atlas.'
+          'Engineered a full-stack AI application serving RESTful APIs via FastAPI for crop prediction, disease detection, and real-time Mandi price updates.',
+          'Integrated ML models: a CNN (92% accuracy) for plant disease detection and a Scikit-learn Random Forest model (98% accuracy) for crop recommendations.',
+          'Utilized MongoDB Atlas for scalable NoSQL cloud storage and deployed backend services on AWS.'
       ],
-      tags: ['Python', 'FastAPI', 'HTML/CSS', 'JavaScript', 'TensorFlow', 'Scikit-learn', 'MongoDB', 'Pandas']
+      tags: ['FastAPI', 'Python', 'MongoDB', 'TensorFlow', 'Scikit-learn', 'AWS']
   },
   {
       type: 'Project',
@@ -57,29 +69,52 @@ export const portfolioData = [
       company: 'Personal Project',
       date: 'April 2025',
       description: [
-          'Performed exploratory data analysis (EDA) to understand customer demographics, usage patterns, and their relationship with churn.',
-          'Visualized key features like age, gender, tenure, and usage frequency to extract insights.',
-          'Trained a Logistic Regression model to predict customer churn, achieving an accuracy of approximately 95% on the test set.'
+          'Conducted Exploratory Data Analysis (EDA) to identify key churn indicators and trained a Logistic Regression model, achieving 95% accuracy on the test set.'
       ],
-      tags: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'Matplotlib']
+      tags: ['Python', 'Pandas', 'Scikit-learn', 'Data Analysis']
   }
 ];
 
 export const resumeText = `Jishnu Roy
-+91-8172086902 | jishnuroy200316@gmail.com | Kolkata, WB | linkedin.com/in/jishnu-roy-16z | github.com/Jishnu1618
++91-8172086902 | jishnuroy200316@gmail.com | linkedin.com/in/jishnu-roy-16z | github.com/Jishnu1618
 
-PROFILE SUMMARY: A proactive third-year ECE student with hands-on experience in machine learning, backend development, and hardware integration. Proficient in building full-stack applications and deploying ML models, with a proven track record of strong performance in hackathons, including a 6th-place ranking in the Infosys Global Hackathon.
+Professional Summary
+Innovative Electronics & Communication undergraduate bridging hardware and software domains with expertise in Full-Stack AI (FastAPI/React) and Edge Computing. Proven track record of architecting scalable ERP solutions and deploying real-time ML models, passionate about solving complex challenges.
 
-EDUCATION: Institute of Engineering and Management, B.Tech in Electronics and Communication Engineering, SGPA: 8.68. July 2023 - May 2027.
+Education
+Institute of Engineering and Management | Kolkata, WB
+B.Tech in Electronics and Communication Engineering (SGPA: 8.68) | 2023 - 2027
 
-EXPERIENCE: Undergraduate Research Trainee | IEDC, IEM | Kolkata, WB. Developed a Virtual Barricading system using YOLOv7. Built and annotated a custom dataset with Roboflow. Deployed optimized PyTorch models on Raspberry Pi 4B for real-time inference. June 2025 - Present.
+Experience
+Junior Software Developer | Jan 2026 - Present
+Radiant Research and Academics Pvt. Ltd. | Kolkata, WB
+- Architecting a scalable Hospital ERP system utilizing a modular microservices architecture to manage end-to-end clinical, billing, and inventory workflows.
+- Designed normalized ERD and UML models with Role-Based Access Control (RBAC) to ensure secure data handling for high-volume hospital operations.
+- Optimized PostgreSQL/MySQL database queries, reducing report generation latency by 40%.
 
-PROJECTS: Agriguru | Python, FastAPI, HTML, JS, CSS | July 2025 - Present. Developed a full-stack web application with FastAPI serving RESTful APIs for features like crop prediction, disease detection, weather forecasting, and a chatbot. Trained a TensorFlow-based CNN model to predict plant disease from uploaded images. Developed a Scikit-learn ML model for crop prediction based on soil contents and weather conditions. Utilized API calls for real-time weather forecasting and Mandi price updates. Managed user data, predictions, and chat logs in MongoDB, hosted on MongoDB Atlas.
+Undergraduate Research Trainee | June 2025 - Nov 2025
+IEDC, IEM | Kolkata, WB
+- Developed a Virtual Barricading System integrating Facial Recognition and Object Detection using YOLOv5 and OpenCV.
+- Curated and annotated a custom dataset via Roboflow to enhance model precision in varying lighting.
+- Deployed optimized PyTorch models on Raspberry Pi 4B, achieving real-time inference suitable for edge security.
 
-Customer Churn Prediction | Python, Pandas, Numpy, Scikit-learn, Matplotlib | April 2025. Performed comprehensive Exploratory Data Analysis (EDA) to analyze customer demographics, usage patterns, and their relationship to churn. Trained a Logistic Regression model to predict customer churn, achieving an accuracy of approximately 95% on the test set.
+Projects
+AgriGuru | FastAPI, Python, MongoDB, TensorFlow | July 2025 - Present
+- Engineered a full-stack AI application serving RESTful APIs via FastAPI for crop prediction, disease detection, and real-time Mandi price updates.
+- Integrated ML models: a CNN (92% accuracy) for plant disease detection and a Scikit-learn Random Forest model (98% accuracy) for crop recommendations.
+- Utilized MongoDB Atlas for scalable NoSQL cloud storage and deployed backend services on AWS.
 
-SKILLS: Languages: Python, JavaScript, Java, MySQL, HTML/CSS. Frameworks & Libraries: PyTorch, TensorFlow, Scikit-learn, FastAPI, YOLO, OpenCV, Pandas, NumPy, Matplotlib. Developer Tools: GitHub, Google Colab, Visual Studio Code, Roboflow, MathWorks, ArduinoIDE.
+Customer Churn Prediction | Python, Pandas, Scikit-learn | April 2025
+- Conducted Exploratory Data Analysis (EDA) to identify key churn indicators and trained a Logistic Regression model, achieving 95% accuracy on the test set.
 
-CERTIFICATIONS: AWS Cloud Practitioner Essentials, Introduction to Machine Learning (IBM), Exploratory Data Analysis for Machine Learning, Introduction to Data Analytics.
+Technical Skills
+Languages: Java, Python, SQL (MySQL, PostgreSQL), JavaScript, HTML/CSS, MATLAB
+Frameworks: FastAPI, PyTorch, TensorFlow, Scikit-learn, YOLO, OpenCV, React.js
+Tools: Git/GitHub, VS Code, Roboflow, Arduino IDE, Postman, AWS, OCI
 
-EXTRACURRICULAR: Infosys Global Hackathon, July 2025, Ranked 6th out of 30 selected teams. Smart Makers Festival, September 2024, Volunteered for the smooth execution of the event. Creative Pursuits: I have a passion for photography and enjoy capturing moments that tell a story. This skill has helped me develop a keen eye for detail and composition, which I apply to all my design and development projects. Sample work: View my photography portfolio on Google Drive at https://drive.google.com/drive/folders/1N8VnL6PErC8v1ZVEwqIytvELZbclinBp?usp=sharing.`;
+Certifications & Awards
+- Oracle Cloud Infrastructure 2025 Data Science Professional (1Z0-1110-25) | Nov 2025
+- Oracle Cloud Infrastructure 2025 Generative AI Professional (1Z0-1127-25) | Nov 2025
+- Oracle Cloud Infrastructure 2025 AI Foundations Associate (1Z0-1122-25) | Nov 2025
+- AWS Cloud Practitioner Essentials (Coursera) | Aug 2025
+- Ranked 6th in Infosys Global Hackathon (Selected among top 30 teams globally) | July 2025`;

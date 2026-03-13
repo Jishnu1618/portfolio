@@ -58,26 +58,26 @@ const Education = () => {
                               <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">AWS Cloud Practitioner Essentials</span>
                             </a>
                             
-                            <a href="https://coursera.org/share/79f1a422844dfcc6fbbc0df72df5ff53" target="_blank" rel="noreferrer" className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300">
+                            <div className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300 cursor-default">
                               <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700 group-hover/link:bg-violet-500/20 group-hover/link:border-violet-400/50 transition-colors shadow-inner">
                                   <Cpu className="w-6 h-6 text-zinc-400 group-hover/link:text-violet-400 transition-colors" />
                               </div> 
-                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">IBM Introduction to Machine Learning</span>
-                            </a>
+                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">OCI 2025 Data Science Professional</span>
+                            </div>
 
-                            <a href="https://coursera.org/share/1cd57a101f24e9cccf4317369bd2823a" target="_blank" rel="noreferrer" className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300">
+                            <div className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300 cursor-default">
                               <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700 group-hover/link:bg-violet-500/20 group-hover/link:border-violet-400/50 transition-colors shadow-inner">
                                   <BarChart className="w-6 h-6 text-zinc-400 group-hover/link:text-violet-400 transition-colors" />
                               </div> 
-                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">Exploratory Data Analysis for ML</span>
-                            </a>
+                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">OCI 2025 Generative AI Professional</span>
+                            </div>
 
-                            <a href="https://coursera.org/share/0d863f863418e869b2b1f259cfe6724d" target="_blank" rel="noreferrer" className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300">
+                            <div className="group/link flex items-center gap-4 p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/50 hover:border-violet-500/50 hover:bg-violet-900/10 transition-all duration-300 cursor-default">
                               <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700 group-hover/link:bg-violet-500/20 group-hover/link:border-violet-400/50 transition-colors shadow-inner">
                                   <PieChart className="w-6 h-6 text-zinc-400 group-hover/link:text-violet-400 transition-colors" />
                               </div> 
-                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">Introduction to Data Analytics</span>
-                            </a>
+                              <span className="group-hover/link:text-zinc-100 font-medium text-zinc-400 transition-colors leading-tight">OCI 2025 AI Foundations Associate</span>
+                            </div>
                        </div>
                   </SpotlightCard>
               </motion.div>
