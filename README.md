@@ -2,7 +2,7 @@
 
 A modern, animated personal portfolio built with **React + Vite**, featuring an interactive star-field background, smooth Framer Motion animations, and a sleek dark theme with ambient glow effects.
 
-🔗 **Live Preview**: _coming soon_
+🔗 **Live Preview**: https://portfolio-sigma-blush-92.vercel.app/
 
 ---
 
