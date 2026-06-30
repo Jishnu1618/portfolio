@@ -113,6 +113,7 @@ Frameworks: FastAPI, PyTorch, TensorFlow, Scikit-learn, YOLO, OpenCV, React.js
 Tools: Git/GitHub, VS Code, Roboflow, Arduino IDE, Postman, AWS, OCI
 
 Certifications & Awards
+-Winner of Frosthacks 2026
 - Oracle Cloud Infrastructure 2025 Data Science Professional (1Z0-1110-25) | Nov 2025
 - Oracle Cloud Infrastructure 2025 Generative AI Professional (1Z0-1127-25) | Nov 2025
 - Oracle Cloud Infrastructure 2025 AI Foundations Associate (1Z0-1122-25) | Nov 2025

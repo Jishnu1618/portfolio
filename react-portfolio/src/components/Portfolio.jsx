@@ -71,10 +71,10 @@ const Portfolio = ({ activeFilter, setActiveFilter }) => {
                     </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <a href="/01_02_26_Software_Resume.pdf" download className="btn-glass w-full sm:w-auto">
+                    <a href="/resume_common_draft.pdf" download className="btn-glass w-full sm:w-auto">
                         <Download className="w-4 h-4 text-cyan-400" /> Download PDF
                     </a>
-                    <a href="/01_02_26_Software_Resume.pdf" target="_blank" rel="noreferrer" className="btn-glass bg-transparent border-zinc-700 w-full sm:w-auto">
+                    <a href="/resume_common_draft.pdf" target="_blank" rel="noreferrer" className="btn-glass bg-transparent border-zinc-700 w-full sm:w-auto">
                         <Eye className="w-4 h-4" /> View Online
                     </a>
                 </div>
