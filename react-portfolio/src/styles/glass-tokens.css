@@ -1,0 +1,41 @@
+/* Design tokens generated from Stitch - Liquid Glass */
+:root {
+  --glass-fill: rgba(255,255,255,0.03);
+  --glass-stroke: rgba(255,255,255,0.10);
+  --glow-primary: rgba(216,180,254,0.15);
+  --glow-secondary: rgba(153,212,174,0.10);
+  --surface: #151217;
+  --surface-bright: #3b383d;
+  --on-surface: #e7e0e7;
+  --primary: #ecd7ff;
+  --primary-container: #d8b4fe;
+  --accent-warm: #ffd6a5;
+  --container-padding-desktop: 40px;
+  --container-padding-mobile: 20px;
+  --gutter: 24px;
+  --glass-blur-lg: 24px;
+  --glass-blur-xl: 40px;
+  --glass-radius: 16px;
+  --glass-elevation-shadow: 0 8px 30px rgba(0,0,0,0.45);
+}
+
+/* Utility helpers */
+.glass-surface {
+  background-color: var(--glass-fill);
+  border: 1px solid var(--glass-stroke);
+  backdrop-filter: blur(var(--glass-blur-lg));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+  border-radius: var(--glass-radius);
+}
+
+.glass-strong {
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(var(--glass-blur-xl));
+  -webkit-backdrop-filter: blur(var(--glass-blur-xl));
+  box-shadow: var(--glass-elevation-shadow);
+}
+
+.glass-glow {
+  box-shadow: 0 8px 40px var(--glow-primary);
+}

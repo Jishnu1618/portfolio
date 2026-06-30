@@ -28,6 +28,7 @@ const Hero = () => {
         {/* Glow behind main text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
 
+        <div className="glass-surface p-8 rounded-2xl z-10 max-w-3xl">
         <motion.div variants={fadeInUp} className="mb-6 inline-block">
              <span className="badge-neon inline-flex items-center gap-2">
                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -77,7 +78,7 @@ const Hero = () => {
             <span className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Kolkata, WB</span>
             <span className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 8172086902</span>
         </motion.div>
-
+        </div>
     </motion.section>
   );
 };

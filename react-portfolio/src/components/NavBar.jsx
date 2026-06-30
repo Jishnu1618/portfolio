@@ -39,7 +39,7 @@ const NavBar = () => {
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full px-4 sm:w-auto"
     >
-        <nav className="mx-auto pointer-events-auto flex items-center gap-2 p-2 rounded-full bg-zinc-900/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_15px_rgba(34,211,238,0.1)] w-max max-w-full overflow-x-auto hide-scrollbar">
+        <nav className="mx-auto pointer-events-auto flex items-center gap-2 p-2 rounded-full glass-strong w-max max-w-full overflow-x-auto hide-scrollbar">
             {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;

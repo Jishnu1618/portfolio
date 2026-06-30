@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./styles/glass-tokens.css";
+
 @layer base {
   :root {
     --bg-dark: #09090b; /* Zinc 950 base */
