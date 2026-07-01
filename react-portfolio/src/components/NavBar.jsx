@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Home, BarChart2, Briefcase, GraduationCap, Sparkles } from 'lucide-react';
+import { Home, BarChart2, Briefcase, GraduationCap, Sparkles, Image } from 'lucide-react';
 
 const navItems = [
   { id: 'home', icon: Home, label: 'Home' },

@@ -86,7 +86,10 @@ function App() {
           viewport={{ once: true, margin: '-100px' }}
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="mb-12">
+          <motion.div
+            variants={fadeInUp}
+            className="rounded-[2rem] border border-white/10 bg-slate-950/50 shadow-2xl shadow-black/30 backdrop-blur-xl p-8 md:p-10"
+          >
             <h3 className="text-3xl md:text-4xl font-bold text-zinc-100 tracking-tight">
               Photography
             </h3>
