@@ -96,7 +96,7 @@ npm run preview   # Preview the production build locally
 
 ## 📸 Screenshots
 
-> _Add screenshots of your portfolio here._
+
 
 ---
 
@@ -108,6 +108,3 @@ npm run preview   # Preview the production build locally
 
 ---
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
