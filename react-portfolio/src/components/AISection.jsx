@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Bot, Send, Loader2, PenTool, Wand2 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../App';
 import { SpotlightCard } from './Portfolio';
@@ -143,14 +145,23 @@ const AISection = () => {
                   className={`flex items-start gap-3 ${msg.type === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   <div
-                    className={`px-4 py-3 rounded-lg max-w-[85%] relative overflow-hidden backdrop-blur-sm whitespace-pre-wrap ${
+                    className={`px-4 py-3 rounded-lg max-w-[85%] relative overflow-hidden backdrop-blur-sm ${
                       msg.type === 'user'
                         ? 'bg-zinc-800/80 text-zinc-300 border border-zinc-700/50'
                         : 'bg-cyan-950/30 text-cyan-50 border border-cyan-500/20 shadow-[inset_0_0_20px_rgba(34,211,238,0.05)]'
                     }`}
                   >
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
-                    {msg.text}
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      className="prose prose-invert max-w-none leading-relaxed whitespace-pre-wrap text-sm"
+                      components={{
+                        p: ({ node, ...props }) => <p className="m-0" {...props} />,
+                        li: ({ node, ...props }) => <li className="ml-4 list-disc" {...props} />,
+                      }}
+                    >
+                      {msg.text}
+                    </ReactMarkdown>
                   </div>
                 </div>
               ))}
@@ -241,11 +252,20 @@ const AISection = () => {
             )}
 
             {fitMessage && (
-              <div className="mt-6 flex-1 p-5 rounded-lg border border-fuchsia-500/20 bg-fuchsia-950/30 text-fuchsia-50 font-mono text-sm leading-relaxed overflow-y-auto whitespace-pre-wrap">
+              <div className="mt-6 flex-1 p-5 rounded-lg border border-fuchsia-500/20 bg-fuchsia-950/30 text-fuchsia-50 font-mono text-sm leading-relaxed overflow-y-auto">
                 <span className="text-fuchsia-400 font-bold opacity-50 block mb-2">
                   {'> OUTPUT DATA'}
                 </span>
-                {fitMessage}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  className="prose prose-invert max-w-none leading-relaxed"
+                  components={{
+                    p: ({ node, ...props }) => <p className="m-0" {...props} />,
+                    li: ({ node, ...props }) => <li className="ml-4 list-disc" {...props} />,
+                  }}
+                >
+                  {fitMessage}
+                </ReactMarkdown>
               </div>
             )}
           </SpotlightCard>
