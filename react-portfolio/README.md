@@ -120,7 +120,10 @@ Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — never commit `.
 
 ## 📸 Screenshots
 
-> _Add screenshots of your portfolio here._
+- ![Landing page](../Screenshots/Screenshot%202026-07-01%20134225.png) — Landing page showing the name and personal details.
+- ![Experience and projects](../Screenshots/Screenshot%202026-07-01%20134249.png) — Experience and projects section.
+- ![Certifications and awards](../Screenshots/Screenshot%202026-07-01%201342321.png) — Certifications and awards section.
+- ![AI terminal and job-fit](../Screenshots/Screenshot%202026-07-01%201342344.png) — AI terminal for exploring sections and a job-fit section for matching experience to job descriptions.
 
 ---
 
@@ -132,6 +135,3 @@ Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — never commit `.
 
 ---
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
