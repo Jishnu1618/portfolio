@@ -30,6 +30,21 @@ export const staggerContainer = {
 function App() {
   const [activeFilter, setActiveFilter] = useState(null);
 
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      requestAnimationFrame(() => {
+        document.getElementById(hash)?.scrollIntoView();
+      });
+      return;
+    }
+
+    window.scrollTo(0, 0);
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   return (
     <div className="text-zinc-300 relative min-h-screen selection:bg-cyan-500/30">
       

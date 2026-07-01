@@ -92,6 +92,30 @@ npm run build
 npm run preview   # Preview the production build locally
 ```
 
+### Generative AI Terminal (Vercel)
+
+The AI chat and job-fit tools call **serverless API routes** (`/api/chat`, `/api/job-fit`). The Gemini API key stays on the server only.
+
+**1. Vercel environment variables** (Project → Settings → Environment Variables):
+
+| Variable | Required | Description |
+| -------- | -------- | ----------- |
+| `GEMINI_API_KEY` | Yes | From [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GEMINI_MODEL` | No | Defaults to `gemini-2.0-flash` |
+
+Apply to **Production**, **Preview**, and **Development**.
+
+**2. Local development**
+
+```bash
+npm run dev          # Vite + local /api routes (reads .env.local automatically)
+npm run dev:vercel   # Full Vercel emulation (optional)
+```
+
+Copy `.env.example` to `.env.local` and set `GEMINI_API_KEY` — never commit `.env.local`.
+
+**3. Deploy:** Push to GitHub; Vercel auto-deploys if the project root is set to `react-portfolio`.
+
 ---
 
 ## 📸 Screenshots
