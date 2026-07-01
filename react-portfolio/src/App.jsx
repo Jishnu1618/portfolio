@@ -7,6 +7,7 @@ import SkillsDashboard from './components/SkillsDashboard';
 import Portfolio from './components/Portfolio';
 import Education from './components/Education';
 import AISection from './components/AISection';
+import PhotoGallery from './components/PhotoGallery';
 
 export const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -29,6 +30,8 @@ export const staggerContainer = {
 
 function App() {
   const [activeFilter, setActiveFilter] = useState(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [photoUrls, setPhotoUrls] = useState([]);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -43,6 +46,13 @@ function App() {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
+  }, []);
+
+  useEffect(() => {
+    fetch('/drive-photos.json')
+      .then((res) => res.json())
+      .then(setPhotoUrls)
+      .catch(() => setPhotoUrls([]));
   }, []);
 
   return (
@@ -68,9 +78,45 @@ function App() {
         
         <SkillsDashboard activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
         <Portfolio activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+
+        <motion.section
+          id="photography"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={staggerContainer}
+        >
+          <motion.div variants={fadeInUp} className="mb-12">
+            <h3 className="text-3xl md:text-4xl font-bold text-zinc-100 tracking-tight">
+              Photography
+            </h3>
+            <p className="mt-3 text-zinc-400 max-w-2xl text-lg">
+              Curated photography work that highlights composition, color, and visual storytelling.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <button
+                type="button"
+                onClick={() => setGalleryOpen(true)}
+                className="btn-glass"
+              >
+                Open Gallery
+              </button>
+              <a
+                href="https://drive.google.com/drive/folders/1N8VnL6PErC8v1ZVEwqIytvELZbclinBp?usp=sharing"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-glass"
+              >
+                View Full Photography Portfolio
+              </a>
+            </div>
+          </motion.div>
+        </motion.section>
+
         <Education />
         <AISection />
       </main>
+      <PhotoGallery images={photoUrls} open={galleryOpen} onClose={() => setGalleryOpen(false)} />
 
     </div>
   );

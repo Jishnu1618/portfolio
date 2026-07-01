@@ -11,6 +11,7 @@ A modern, animated personal portfolio built with **React + Vite**, featuring an 
 - **Interactive Star Field** — Canvas-based shooting-star particle background that reacts to the viewport
 - **Animated Sections** — Smooth fade-in and stagger animations powered by Framer Motion
 - **Skills Dashboard** — Visual skill-level bars organized by Languages, Frameworks, and Tools
+- **Photography Portfolio** — A gallery of curated photography work and visual storytelling
 - **Portfolio & Experience** — Filterable cards showcasing projects and work experience with tech tags
 - **Education Timeline** — Structured education and certification details
 - **AI Chat Section** — Embedded AI assistant for visitor interaction

@@ -6,6 +6,7 @@ const navItems = [
   { id: 'home', icon: Home, label: 'Home' },
   { id: 'skills', icon: BarChart2, label: 'Skills' },
   { id: 'portfolio', icon: Briefcase, label: 'Portfolio' },
+  { id: 'photography', icon: Image, label: 'Photography' },
   { id: 'education', icon: GraduationCap, label: 'Education' },
   { id: 'gemini', icon: Sparkles, label: 'AI Tools' },
 ];
